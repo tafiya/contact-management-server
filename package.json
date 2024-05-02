@@ -15,5 +15,8 @@
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.5.0"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.7"
   }
 }

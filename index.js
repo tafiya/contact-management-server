@@ -1,5 +1,6 @@
 const express =require('express');
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const cookieParser=require('cookie-parser');
 const app =express();
 require('dotenv').config()
 const cors =require('cors');
@@ -7,8 +8,19 @@ var jwt = require('jsonwebtoken');
 const port =process.env.PORT || 5300;
 
 //middleware
-app.use(cors());
 app.use(express.json());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173/",
+      "http://localhost:5174/",
+      "https://contact-management-1c230.web.app/",
+    ],
+    credentials: true,
+  })
+);
+ app.use(cookieParser());
+
 
 
 
@@ -28,7 +40,19 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    const userCollection = client.db("chatNookCollection").collection("users");
+    
+   
+    
+    // Send a ping to confirm a successful connection
+    // await client.db("admin").command({ ping: 1 });
+    // console.log("Pinged your deployment. You successfully connected to MongoDB!");
+  } finally {
+    // Ensures that the client will close when you finish/error
+    //await client.close();
+  }
+}
+run().catch(console.dir);
+const userCollection = client.db("chatNookCollection").collection("users");
     const contactCollection = client.db("management").collection("client");
    
  
@@ -55,7 +79,7 @@ const verifyToken = (req, res, next) => {
   })
 }
 
-    //post related api
+    //post related apiru
     app.get('/contacts',async(req,res)=>{
  
         const result= await contactCollection.find().toArray(); 
@@ -97,17 +121,6 @@ const verifyToken = (req, res, next) => {
         res.send(result);
       })
   
-   
-    
-    // Send a ping to confirm a successful connection
-    // await client.db("admin").command({ ping: 1 });
-    // console.log("Pinged your deployment. You successfully connected to MongoDB!");
-  } finally {
-    // Ensures that the client will close when you finish/error
-    //await client.close();
-  }
-}
-run().catch(console.dir);
 
 
 
